@@ -1,0 +1,24 @@
+{% extends "finance/base.html" %}
+{% block title %}Reports — Finance Copilot{% endblock %}
+{% block content %}
+<h3 class="mb-4">📄 Financial Reports</h3>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4 text-center">
+            <i class="bi bi-file-earmark-pdf text-danger" style="font-size: 4rem;"></i>
+            <h5 class="mt-3">Monthly Financial Report</h5>
+            <p class="text-muted">
+                Download a complete PDF report including your income, expenses,
+                category breakdown, budget status, and savings goals progress.
+            </p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-lg">
+                    <i class="bi bi-download"></i> Download PDF Report
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

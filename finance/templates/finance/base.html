@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI Finance Copilot{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #f8f9fa; }
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: #a0a0b0;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 2px 10px;
+            transition: all 0.3s;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: #ffffff;
+        }
+        .sidebar .nav-link i { margin-right: 10px; }
+        .sidebar-brand {
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: 10px 20px 30px;
+            display: block;
+        }
+        .main-content { padding: 30px; }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .metric-card.green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        .metric-card.red {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+        .metric-card.orange {
+            background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+        }
+        .chat-box {
+            height: 450px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .chat-message {
+            margin-bottom: 15px;
+        }
+        .chat-message.user .bubble {
+            background: #667eea;
+            color: white;
+            border-radius: 18px 18px 4px 18px;
+            padding: 10px 16px;
+            max-width: 70%;
+            margin-left: auto;
+        }
+        .chat-message.agent .bubble {
+            background: white;
+            color: #333;
+            border-radius: 18px 18px 18px 4px;
+            padding: 10px 16px;
+            max-width: 70%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+{% if user.is_authenticated %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+            <a class="sidebar-brand" href="{% url 'dashboard' %}">
+                💰 Finance Copilot
+            </a>
+            <nav class="nav flex-column">
+                <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+                   href="{% url 'dashboard' %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'expense_list' %}active{% endif %}"
+                   href="{% url 'expense_list' %}">
+                    <i class="bi bi-receipt"></i> Expenses
+                </a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'add_expense' %}active{% endif %}"
+                   href="{% url 'add_expense' %}">
+                    <i class="bi bi-plus-circle"></i> Add Expense
+                </a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'add_income' %}active{% endif %}"
+                   href="{% url 'add_income' %}">
+                    <i class="bi bi-cash-stack"></i> Add Income
+                </a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'budget' %}active{% endif %}"
+                   href="{% url 'budget' %}">
+                    <i class="bi bi-pie-chart"></i> Budget
+                </a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'goals' %}active{% endif %}"
+                   href="{% url 'goals' %}">
+                    <i class="bi bi-trophy"></i> Goals
+                </a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'agent_chat' %}active{% endif %}"
+                   href="{% url 'agent_chat' %}">
+                    <i class="bi bi-robot"></i> AI Copilot
+                </a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'reports' %}active{% endif %}"
+                   href="{% url 'reports' %}">
+                    <i class="bi bi-file-earmark-pdf"></i> Reports
+                </a>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+                <a class="nav-link" href="{% url 'logout' %}">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 main-content">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container">
+    {% block auth_content %}{% endblock %}
+</div>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

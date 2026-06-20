@@ -1,0 +1,61 @@
+{% extends "finance/base.html" %}
+{% block title %}Budget — Finance Copilot{% endblock %}
+{% block content %}
+<h3 class="mb-4">📊 Budget — {{ month }}</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card p-4">
+            <h5>Set Budget</h5>
+            <form method="post" class="mt-3">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <select name="category" class="form-select">
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}">{{ cat.icon }} {{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Budget Amount (₹)</label>
+                    <input type="number" name="amount" class="form-control"
+                           placeholder="0.00" step="0.01" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Set Budget</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card p-4">
+            <h5>Budget vs Actual</h5>
+            {% for item in budget_data %}
+            <div class="mb-4">
+                <div class="d-flex justify-content-between mb-1">
+                    <span><strong>{{ item.category }}</strong></span>
+                    <span class="{% if item.remaining < 0 %}text-danger{% else %}text-success{% endif %}">
+                        ₹{{ item.spent|floatformat:0 }} / ₹{{ item.budget|floatformat:0 }}
+                    </span>
+                </div>
+                <div class="progress" style="height: 12px;">
+                    <div class="progress-bar {% if item.percentage >= 100 %}bg-danger{% elif item.percentage >= 80 %}bg-warning{% else %}bg-success{% endif %}"
+                         style="width: {{ item.percentage }}%">
+                        {{ item.percentage }}%
+                    </div>
+                </div>
+                <small class="text-muted">
+                    {% if item.remaining >= 0 %}
+                        ₹{{ item.remaining|floatformat:0 }} remaining
+                    {% else %}
+                        ₹{{ item.remaining|floatformat:0|cut:"-" }} over budget
+                    {% endif %}
+                </small>
+            </div>
+            {% empty %}
+            <p class="text-muted text-center py-3">No budgets set yet. Add one on the left.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

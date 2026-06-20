@@ -1,0 +1,74 @@
+{% extends "finance/base.html" %}
+{% block title %}Goals — Finance Copilot{% endblock %}
+{% block content %}
+<h3 class="mb-4">🏆 Savings Goals</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card p-4">
+            <h5>Add New Goal</h5>
+            <form method="post" class="mt-3">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Goal Name</label>
+                    <input type="text" name="name" class="form-control"
+                           placeholder="e.g. Emergency Fund, New Phone" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Target Amount (₹)</label>
+                    <input type="number" name="target_amount" class="form-control"
+                           placeholder="0.00" step="0.01" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Already Saved (₹)</label>
+                    <input type="number" name="current_amount" class="form-control"
+                           placeholder="0.00" step="0.01" value="0">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Deadline (optional)</label>
+                    <input type="date" name="deadline" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Add Goal</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        {% for item in goals_data %}
+        <div class="card p-4 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">🎯 {{ item.goal.name }}</h5>
+                <span class="badge bg-primary fs-6">{{ item.percentage }}%</span>
+            </div>
+            <div class="progress mb-2" style="height: 16px;">
+                <div class="progress-bar bg-success" style="width: {{ item.percentage }}%"></div>
+            </div>
+            <div class="row text-center">
+                <div class="col">
+                    <small class="text-muted">Saved</small>
+                    <div><strong>₹{{ item.goal.current_amount }}</strong></div>
+                </div>
+                <div class="col">
+                    <small class="text-muted">Target</small>
+                    <div><strong>₹{{ item.goal.target_amount }}</strong></div>
+                </div>
+                <div class="col">
+                    <small class="text-muted">Remaining</small>
+                    <div><strong>₹{{ item.goal.target_amount|floatformat:0 }}</strong></div>
+                </div>
+                {% if item.goal.deadline %}
+                <div class="col">
+                    <small class="text-muted">Deadline</small>
+                    <div><strong>{{ item.goal.deadline }}</strong></div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="card p-4 text-center text-muted">
+            No savings goals yet. Add your first goal on the left.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

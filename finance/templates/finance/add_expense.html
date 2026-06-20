@@ -1,0 +1,126 @@
+{% extends "finance/base.html" %}
+{% block title %}Add Expense — Finance Copilot{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <h3 class="mb-4">➕ Add Expense</h3>
+
+        <!-- OCR Button -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{% url 'ocr_expense' %}" class="btn btn-outline-primary">
+                <i class="bi bi-camera"></i> Scan Receipt Instead
+            </a>
+        </div>
+
+        <!-- Voice Input Card -->
+        <div class="card p-4 mb-4">
+            <h5>🎙️ Voice Input</h5>
+            <p class="text-muted small">Say something like "Spent 350 on lunch" or "Auto fare 150"</p>
+            <div class="d-flex gap-2">
+                <button id="voiceBtn" class="btn btn-outline-danger">
+                    <i class="bi bi-mic"></i> Start Recording
+                </button>
+                <span id="voiceStatus" class="text-muted align-self-center"></span>
+            </div>
+            <div id="voiceResult" class="mt-3 d-none">
+                <div class="alert alert-success">
+                    <strong>Detected:</strong> <span id="voiceText"></span>
+                    <br><strong>Amount:</strong> ₹<span id="voiceAmount"></span>
+                    <br><strong>Category:</strong> <span id="voiceCategory"></span>
+                    <button class="btn btn-sm btn-success mt-2" id="confirmVoice">✅ Confirm & Save</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manual Entry Card -->
+        <div class="card p-4">
+            <h5>✏️ Manual Entry</h5>
+            <form method="post" class="mt-3">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Amount (₹)</label>
+                    <input type="number" name="amount" class="form-control"
+                           placeholder="0.00" step="0.01" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <select name="category" class="form-select" required>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}">{{ cat.icon }} {{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <input type="text" name="description" class="form-control"
+                           placeholder="e.g. Lunch at cafe">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Date</label>
+                    <input type="date" name="date" class="form-control"
+                           value="{{ today }}" required>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" name="is_recurring" class="form-check-input" id="recurring">
+                    <label class="form-check-label" for="recurring">Recurring expense (rent, EMI, subscriptions)</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Save Expense</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const voiceBtn = document.getElementById("voiceBtn");
+const voiceStatus = document.getElementById("voiceStatus");
+const voiceResult = document.getElementById("voiceResult");
+let voiceData = null;
+
+voiceBtn.addEventListener("click", () => {
+    if (!("webkitSpeechRecognition" in window) && !("SpeechRecognition" in window)) {
+        alert("Voice input not supported in this browser. Please use Chrome.");
+        return;
+    }
+
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "en-IN";
+    recognition.start();
+    voiceBtn.innerHTML = '<i class="bi bi-mic-fill text-danger"></i> Listening...';
+    voiceStatus.textContent = "Speak now...";
+
+    recognition.onresult = async (event) => {
+        const transcript = event.results[0][0].transcript;
+        voiceStatus.textContent = `Heard: "${transcript}"`;
+        voiceBtn.innerHTML = '<i class="bi bi-mic"></i> Start Recording';
+
+        const response = await fetch("{% url 'voice_expense' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({ transcript })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            voiceData = data.result;
+            document.getElementById("voiceText").textContent = transcript;
+            document.getElementById("voiceAmount").textContent = data.result.amount;
+            document.getElementById("voiceCategory").textContent = data.result.category;
+            voiceResult.classList.remove("d-none");
+            voiceStatus.textContent = "✅ Expense saved automatically!";
+        } else {
+            voiceStatus.textContent = "❌ Could not extract expense. Try again.";
+        }
+    };
+
+    recognition.onerror = () => {
+        voiceBtn.innerHTML = '<i class="bi bi-mic"></i> Start Recording';
+        voiceStatus.textContent = "❌ Recording failed. Try again.";
+    };
+});
+</script>
+{% endblock %}
