@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-^v2d1o=t=q+kb1q=#+_tv5@+z%x0f4o4%d+=ha9!ymwh_@h2m$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,aifinancecopilot-production.up.railway.app").split(",")
 
 
 # Application definition
