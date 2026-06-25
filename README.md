@@ -4,146 +4,384 @@ An AI-powered personal finance assistant built with Django and PostgreSQL, featu
 
 ---
 
-## What It Does
+## 🌐 Live Demo
 
-Most finance apps just track expenses. This one thinks about them. A LangGraph-style agent with 6 tools analyzes your spending patterns, checks your budget status, forecasts end-of-month expenses, detects unusual transactions using machine learning, and retrieves personalized financial advice from a RAG knowledge base — all through a conversational interface.
+**Live Application:**
+https://aifinancecopilot-production.up.railway.app
 
----
-
-## Features
-
-- **Agentic AI** — Groq LLaMA 3.1 with 6 tool-calling functions for multi-step financial reasoning
-- **RAG Financial Advisor** — ChromaDB knowledge base with financial tips retrieved semantically
-- **Receipt OCR** — Upload receipt photos, Tesseract extracts amount and category automatically
-- **Voice Expense Logging** — Speak "Spent 350 on lunch", AI extracts and saves the expense
-- **Spending Forecasting** — Projects end-of-month spending based on daily average
-- **Anomaly Detection** — Scikit-learn Isolation Forest detects unusual spending patterns
-- **Budget Tracking** — Set budgets per category, track vs actual spending with progress bars
-- **Savings Goals** — Set financial goals with targets and deadlines, track progress
-- **PDF Reports** — Generate monthly financial reports with ReportLab
-- **Interactive Dashboard** — Chart.js visualizations for daily spending and category breakdown
-- **User Authentication** — Django session-based login, register, and protected views
+**Source Code:**
+https://github.com/salmasalu/Ai_finance_copilot
 
 ---
 
-## Agent Tools
+## 📌 Overview
 
-| Tool | Description |
-|---|---|
-| `get_spending_summary` | Current month income, expenses, savings, category breakdown |
-| `get_budget_status` | Budget vs actual spending per category |
-| `get_savings_goals` | Progress on all savings goals |
-| `get_spending_forecast` | Projected end of month spending |
-| `detect_anomalies` | Unusual spending detection via Isolation Forest |
-| `get_financial_advice` | RAG retrieval from financial knowledge base |
+AI Personal Finance Copilot helps users manage their finances through intelligent automation and AI-powered insights.
+
+Unlike traditional expense trackers, the application analyzes spending patterns, forecasts future expenses, detects unusual transactions, and provides personalized financial guidance through a conversational AI assistant.
+
+The project combines Large Language Models (LLMs), Retrieval-Augmented Generation (RAG), OCR, Machine Learning, and financial analytics into a single platform.
 
 ---
 
-## Tech Stack
+## 🚀 Features
 
-| Layer | Technology |
-|---|---|
-| Framework | Django 5.2, Django REST Framework |
-| Database | PostgreSQL (Neon) |
-| AI Agent | Groq LLaMA 3.1, Tool Calling |
-| RAG | ChromaDB, Sentence Transformers |
-| OCR | Tesseract, Pillow |
-| NLP | Groq LLM for expense extraction |
-| ML | Scikit-learn Isolation Forest |
-| Frontend | Django Templates, Bootstrap 5, Chart.js |
-| Voice | Web Speech API |
-| Reports | ReportLab |
-| Deployment | Docker, docker-compose |
+### 🤖 Agentic AI Financial Assistant
+
+* Groq LLaMA 3.1 powered assistant
+* Multi-step financial reasoning
+* Natural language financial conversations
+* Context-aware spending analysis
+
+### 📚 RAG Financial Advisor
+
+* ChromaDB vector database
+* Semantic retrieval of financial knowledge
+* Personalized recommendations
+* Contextual financial advice
+
+### 🧾 Receipt OCR
+
+* Upload receipt images
+* Automatic text extraction using Tesseract OCR
+* Expense amount detection
+* Category suggestions
+
+### 🎙️ Voice Expense Logging
+
+* Voice-based expense entry
+* Natural language expense extraction
+* Hands-free transaction recording
+
+### 📈 Spending Forecasting
+
+* Monthly spending projections
+* Daily trend analysis
+* Budget forecasting
+
+### 🚨 Anomaly Detection
+
+* Isolation Forest machine learning model
+* Detection of unusual spending behavior
+* Outlier transaction identification
+
+### 💵 Expense & Income Management
+
+* Expense tracking
+* Income management
+* Transaction history
+* Category-wise organization
+
+### 🎯 Savings Goals
+
+* Create financial goals
+* Track progress
+* Target amount monitoring
+
+### 📊 Interactive Dashboard
+
+* Financial summary metrics
+* Spending analytics
+* Category breakdown charts
+* Trend visualizations
+
+### 📄 Automated Reports
+
+* Monthly PDF report generation
+* Downloadable financial reports
+
+### 🔐 Authentication & Security
+
+* User registration
+* Secure login
+* Session-based authentication
+* Protected views
 
 ---
 
-## Project Structure
+## 🛠 Agent Tools
 
+| Tool                  | Description                                               |
+| --------------------- | --------------------------------------------------------- |
+| get_spending_summary  | Monthly income, expenses, savings, and category breakdown |
+| get_budget_status     | Budget utilization and remaining budget                   |
+| get_savings_goals     | Savings goal progress tracking                            |
+| get_spending_forecast | Future spending estimation                                |
+| detect_anomalies      | Machine learning-based unusual spending detection         |
+| get_financial_advice  | Personalized advice from the RAG knowledge base           |
+
+---
+
+## 📸 Screenshots
+
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+### AI Copilot
+
+![AI Copilot](screenshots/copilot.png)
+
+### Expense Tracking
+
+![Expense Tracking](screenshots/expense.png)
+
+### Financial Reports
+
+![Reports](screenshots/report.png)
+
+---
+
+## 🏗️ System Architecture
+
+```text
+User
+ │
+ ▼
+Django Web Application
+ │
+ ├── Expense Management
+ ├── Income Tracking
+ ├── Budget Tracking
+ ├── Goal Management
+ │
+ ▼
+AI Agent Layer
+ │
+ ├── Financial Tools
+ ├── Spending Forecasting
+ ├── Anomaly Detection
+ └── RAG Retrieval
+ │
+ ▼
+Groq LLM
+ │
+ ▼
+Personalized Financial Insights
+
+Database Layer
+ └── PostgreSQL
 ```
+
+---
+
+## 💻 Tech Stack
+
+| Layer            | Technology            |
+| ---------------- | --------------------- |
+| Backend          | Django 5              |
+| Database         | PostgreSQL            |
+| AI Model         | Groq LLaMA 3.1        |
+| RAG              | ChromaDB              |
+| Embeddings       | Sentence Transformers |
+| OCR              | Tesseract OCR         |
+| Machine Learning | Scikit-learn          |
+| NLP              | Groq LLM              |
+| Frontend         | Django Templates      |
+| Styling          | Bootstrap 5           |
+| Charts           | Chart.js              |
+| Voice Input      | Web Speech API        |
+| PDF Generation   | ReportLab             |
+| Deployment       | Railway               |
+| Version Control  | Git & GitHub          |
+
+---
+
+## 📂 Project Structure
+
+```text
 ai-finance-copilot/
+│
 ├── finance/
-│   ├── models.py          # 7 database models
-│   ├── views.py           # All view functions
-│   ├── agent.py           # LangGraph-style agent with 6 tools
-│   ├── rag_utils.py       # ChromaDB RAG pipeline
-│   ├── nlp_utils.py       # LLM-based expense extraction
-│   ├── ocr_utils.py       # Tesseract receipt scanning
-│   ├── report_utils.py    # ReportLab PDF generation
-│   ├── urls.py            # URL routing
-│   ├── admin.py           # Django admin configuration
-│   └── templates/         # Django HTML templates
+│   ├── models.py
+│   ├── views.py
+│   ├── agent.py
+│   ├── rag_utils.py
+│   ├── nlp_utils.py
+│   ├── ocr_utils.py
+│   ├── report_utils.py
+│   ├── urls.py
+│   ├── admin.py
+│   └── templates/
+│
 ├── financecopilot/
-│   ├── settings.py        # Django configuration
-│   └── urls.py            # Root URL configuration
+│   ├── settings.py
+│   └── urls.py
+│
 ├── datasets/
-│   └── financial_tips.txt # RAG knowledge base
+│   └── financial_tips.txt
+│
+├── screenshots/
+│   ├── dashboard.png
+│   ├── copilot.png
+│   ├── expense.png
+│   └── report.png
+│
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
-└── manage.py
+├── manage.py
+└── README.md
 ```
 
 ---
 
-## Setup
+## 🗄️ Database Models
 
-**1. Clone the repo**
+### UserProfile
+
+* Monthly income
+* Budget settings
+* User preferences
+
+### Category
+
+* Expense categories
+* Category icons
+
+### Expense
+
+* Amount
+* Category
+* Date
+* Input type (Manual, Voice, OCR)
+* Recurring status
+
+### Income
+
+* Income source
+* Amount
+* Date
+
+### Budget
+
+* Category-wise budget allocation
+* Monthly limits
+
+### SavingsGoal
+
+* Goal targets
+* Progress tracking
+* Deadlines
+
+### ChatHistory
+
+* User conversations
+* AI responses
+
+---
+
+## ⚙️ Installation
+
+### Clone Repository
+
 ```bash
-git clone https://github.com/salmasalu/Ai_finance_copilot
+git clone https://github.com/salmasalu/Ai_finance_copilot.git
 cd Ai_finance_copilot
 ```
 
-**2. Create virtual environment**
+### Create Virtual Environment
+
+**Windows**
+
 ```bash
 python -m venv venv
-venv\Scripts\activate  # Windows
-source venv/bin/activate  # Mac/Linux
+venv\Scripts\activate
 ```
 
-**3. Install dependencies**
+**Linux / macOS**
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+### Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-**4. Install Tesseract OCR**
+### Install Tesseract OCR
 
-Download from: https://github.com/UB-Mannheim/tesseract/wiki
+Download and install Tesseract OCR and verify:
 
-**5. Create `.env` file**
+```bash
+tesseract --version
 ```
-DATABASE_URL=your_neon_postgresql_connection_string
+
+### Configure Environment Variables
+
+Create a `.env` file:
+
+```env
+DATABASE_URL=your_postgresql_connection_string
 GROQ_API_KEY=your_groq_api_key
 DJANGO_SECRET_KEY=your_secret_key
+DJANGO_DEBUG=True
 ```
 
-**6. Run migrations**
+### Run Migrations
+
 ```bash
 python manage.py migrate
+```
+
+### Create Admin User
+
+```bash
 python manage.py createsuperuser
 ```
 
-**7. Run the server**
+### Run Development Server
+
 ```bash
 python manage.py runserver
 ```
 
-Open `http://127.0.0.1:8000`
+Open:
+
+```text
+http://127.0.0.1:8000
+```
 
 ---
 
-## Database Models
+## 🎯 Key AI Concepts Demonstrated
 
-- **UserProfile** — Monthly income, budget, currency settings
-- **Category** — Expense categories with icons
-- **Expense** — Transactions with amount, category, date, input type (manual/voice/OCR), recurring flag
-- **Income** — Income entries with source
-- **Budget** — Monthly budget per category
-- **SavingsGoal** — Financial goals with target and current amounts
-- **ChatHistory** — Agent conversation history
+* Agentic AI Workflows
+* Retrieval-Augmented Generation (RAG)
+* Vector Databases
+* Large Language Models (LLMs)
+* Tool Calling
+* OCR-based Information Extraction
+* Natural Language Processing
+* Anomaly Detection
+* Financial Forecasting
+* Conversational AI
 
 ---
 
-## Author
+## 📈 Future Enhancements
+
+* Email-based password reset
+* Multi-currency support
+* Investment portfolio tracking
+* Financial risk scoring
+* Mobile application
+* Real-time bank integration
+* Personalized financial coaching
+
+---
+
+## 👩‍💻 Author
 
 **Ummusalma P T**
-Email- salmasalu667@gmail.com
+
+* GitHub: https://github.com/salmasalu
+* LinkedIn: https://www.linkedin.com/in/ummusalma-p-t
+* Email: [salmasalu667@gmail.com](mailto:salmasalu667@gmail.com)
+
+---
+
+⭐ If you found this project interesting, consider giving it a star.
