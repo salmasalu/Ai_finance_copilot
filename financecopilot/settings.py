@@ -29,7 +29,7 @@ SECRET_KEY = "django-insecure-^v2d1o=t=q+kb1q=#+_tv5@+z%x0f4o4%d+=ha9!ymwh_@h2m$
 DEBUG = True
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,aifinancecopilot-production.up.railway.app").split(",")
-
+CSRF_TRUSTED_ORIGINS = ["https://aifinancecopilot-production.up.railway.app"]
 
 # Application definition
 
